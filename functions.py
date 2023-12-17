@@ -185,8 +185,19 @@ def getIngredientsByRecipeIds(recipe_ids):
 
         return results.fetchall()
     
+"""
+    getIngredientsByRecipeIds
+    Retournes tous les ingredients lies a la liste de recipe.id en input
 
+"""
+def getIngredientsByRecipeId(recipe_id):
+    with Session(engine) as session:
+        statement = select(Ingredients).where(Ingredients.fk_recipe == recipe_id)
+        results = session.exec(statement)
 
+        return results.fetchall()
+    
+    
 
 
 

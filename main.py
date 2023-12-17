@@ -69,3 +69,6 @@ async def addRecipe(rec: Recipe):
     }
 
 
+@app.get("/recette/{recetteID}")
+async def getRecetteByID(recetteID):
+    return getIngredientsByRecipeId(recetteID)
