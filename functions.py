@@ -24,7 +24,6 @@ def hashSha256(string):
                                                 USERS
 """
 
-
 """
     createUser
     Insert une nouvelle ligne dans la table Users avec le login et mdp en claire recu
@@ -36,6 +35,10 @@ def createUser(login, pswd):
     with Session(engine) as session:
         session.add(user)
         session.commit()
+
+        session.refresh(user)
+        return user
+    
 
 
 """
@@ -66,13 +69,16 @@ def createRecipe(name, description, id_user):
         session.add(recipe)
         session.commit()
 
+        session.refresh(recipe)
+        return recipe
+
 
 """
     getRecettesByUserId
     Retourne toutes les recettes lies a un utilisateur via l'id en input
 
 """
-def getRecettesByUserId(user_id):
+def getRecipesByUserId(user_id):
     with Session(engine) as session:
         statement = select(Recipes).where(Recipes.fk_user == user_id)
         results = session.exec(statement)
@@ -84,7 +90,7 @@ def getRecettesByUserId(user_id):
     getRecettesById
     Retourne une recette via son id
 """
-def getRecettesById(recipe_id):
+def getRecipeById(recipe_id):
     with Session(engine) as session:
         statement = select(Recipes).where(Recipes.id == recipe_id)
         results = session.exec(statement)
@@ -109,6 +115,22 @@ def createAisle(name):
         session.add(aisle)
         session.commit()
 
+        session.refresh(aisle)
+        return aisle
+    
+
+"""
+    getAllAisles
+    Retourne tout les rayons present en BDD
+
+"""
+def getAllAisles():
+    with Session(engine) as session:  
+        statement = select(Aisles)  
+        results = session.exec(statement)  
+        return results.fetchall()
+
+
 
 """
                                                 INGREDIENTS
@@ -127,6 +149,9 @@ def createIngredient(name, quantity, unit, id_aisle, id_recipe):
         session.add(ingredient)
         session.commit()
 
+        session.refresh(ingredient)
+        return ingredient
+
 """
     createMultipleIngredients
     Insert plusieurs ligne dans la table ingredients toutes ayant la meme fk_recipe
@@ -136,10 +161,10 @@ def createMultipleIngredients(ingredientsList, id_recipe):
     with Session(engine) as session:
         ingredients_to_add = []
         for ingredient_data in ingredientsList:
-            name = ingredient_data['name']
-            quantity = ingredient_data['quantity']
-            unit = ingredient_data['unit']
-            id_aisle = ingredient_data['id_aisle']
+            name = ingredient_data.name
+            quantity = ingredient_data.quantity
+            unit = ingredient_data.unit
+            id_aisle = ingredient_data.rayon
             
             ingredient = Ingredients(name=name, quantity=quantity, unit=unit, fk_recipe=id_recipe, fk_aisle=id_aisle)
             ingredients_to_add.append(ingredient)

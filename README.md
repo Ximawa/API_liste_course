@@ -19,8 +19,11 @@ Creation de la BDD:
 
 py ./model.py
 
+----------------------------------------------------------------
 
+Lancement de l'API: 
 
+uvicorn main:app --reload
 
 
 
