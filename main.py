@@ -4,6 +4,9 @@ from pydantic import BaseModel
 
 from functions import *
 
+"""
+                                                BASEMODEL to declare request body
+"""
 
 class Aisle(BaseModel):
     name: str
@@ -27,6 +30,12 @@ class Recipe(BaseModel):
 class GroceriesList(BaseModel):
     id_recipes: List[int]
 
+
+"""
+                                                ROUTES
+"""
+
+
 app = FastAPI()
 
 @app.get("/")
@@ -39,16 +48,22 @@ async def getAllRayon():
     return getAllAisles()
 
 
+@app.get("/users")
+async def getAllUsers():
+    return getAllUsers()
+
+
+@app.get("/recette/{recetteID}")
+async def getRecipeByID(recetteID):
+    return getIngredientsByRecipeId(recetteID)
+
+
 @app.post("/addUser")
 async def addUser(user: User):
     # TODO  Verif si login est libre
     u = createUser(user.login, user.pswd)
 
     return {"status": "Success", "userID" : u.id}
-
-@app.get("/users")
-async def getAUsers():
-    return getAllUsers()
 
 
 @app.post("/addAisle")
@@ -57,7 +72,6 @@ async def addAisle(aisle: Aisle):
     createAisle(aisle.name)
 
     return {"status": "Success"}
-
 
 
 @app.post("/addRecipe")
@@ -72,11 +86,6 @@ async def addRecipe(rec: Recipe):
     }
 
 
-@app.get("/recette/{recetteID}")
-async def getRecetteByID(recetteID):
-    return getIngredientsByRecipeId(recetteID)
-
 @app.post("/listeCourse")
-async def getGroceriesList(list: GroceriesList):
-    print(f"Recette demander : {list.id_recipes}")
+async def groceriesList(list: GroceriesList):
     return getIngredientsByRecipeIds(list.id_recipes)

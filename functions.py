@@ -176,7 +176,7 @@ def createMultipleIngredients(ingredientsList, id_recipe):
 
 """
     getIngredientsByRecipeIds
-    Retournes tous les ingredients lies a la liste de recipe.id en input
+    Prend en input une liste d'id de recette et retourne les ingredients neccesaire en addionant la quantite des ingredients ayant le meme nom et unite
 
 """
 def getIngredientsByRecipeIds(recipe_ids):
@@ -186,7 +186,6 @@ def getIngredientsByRecipeIds(recipe_ids):
 
         ingredients_dict = defaultdict(float)
 
-        
         for row in results.fetchall():
             ingredient_key = (row.Ingredients.name, row.Ingredients.unit, row.Aisles.name)
             ingredients_dict[ingredient_key] += row.Ingredients.quantity
@@ -196,6 +195,7 @@ def getIngredientsByRecipeIds(recipe_ids):
             for key, quantity in ingredients_dict.items()
         ]
         return unique_ingredients
+
 
 """
     getIngredientsByRecipeIds
