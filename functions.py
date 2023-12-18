@@ -163,6 +163,21 @@ def getAllAisles():
         results = session.exec(statement)  
         return results.fetchall()
 
+"""
+
+checkAisleNameAvaible 
+Vérifie si le nom de la recette d'un utilisateur existe déja 
+
+"""
+def checkAisleNameAvaible(name):
+    with Session(engine) as session:
+        statement = select(Aisles).where(Aisles.name == name)
+        results = session.exec(statement)
+        if results.fetchall() == []:
+            return True
+        else:
+            return False
+
 
 
 """

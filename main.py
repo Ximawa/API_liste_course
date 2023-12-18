@@ -69,11 +69,11 @@ async def addUser(user: User):
 
 @app.post("/addAisle")
 async def addAisle(aisle: Aisle):
-    # TODO  Verif si name est libre
-    createAisle(aisle.name)
-
-    return {"status": "Success"}
-
+    if (checkAisleNameAvaible(aisle.name)):
+        createAisle(aisle.name)
+        return {"status": "Success"}
+    else:
+        return {"error": "Le Rayon existe deja"}
 
 @app.post("/addRecipe")
 async def addRecipe(rec: Recipe):
@@ -86,10 +86,6 @@ async def addRecipe(rec: Recipe):
         }
     else:
         return {"error: la recette existe deja"}
-
-
-
-    
 
 
 @app.post("/listeCourse")
