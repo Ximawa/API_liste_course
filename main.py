@@ -30,6 +30,9 @@ class Recipe(BaseModel):
 class GroceriesList(BaseModel):
     id_recipes: List[int]
 
+class DelUsers(BaseModel):
+    id_user: int
+
 
 """
                                                 ROUTES
@@ -92,3 +95,7 @@ async def addRecipe(rec: Recipe):
 async def groceriesList(list: GroceriesList):
     return getIngredientsByRecipeIds(list.id_recipes)
 
+@app.post("/deleteUser")
+async def deleteUser(user: DelUsers):
+    deleteUsers(user.id_user)
+    return {"Status": "Success"}

@@ -55,8 +55,8 @@ def getAllUsers():
 
 """
 
-checkLoginAvaible 
-Vérifie si le nom de l'utilisateur existe déja
+    checkLoginAvaible 
+    Vérifie si le nom de l'utilisateur existe déja
 
 """
 
@@ -68,7 +68,21 @@ def checkLoginAvaible(login):
             return True
         else:
             return False
-        
+
+"""
+
+    deletUsers
+    Supprime l'utilisateur
+
+"""
+
+def deleteUsers(id_user):
+    with Session(engine) as session:
+        statement = select(Users).where(Users.id == id_user)
+        results = session.exec(statement)
+        user = results.one()
+        session.delete(user)
+        session.commit()
 
 """
                                                 RECIPES
