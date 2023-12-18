@@ -49,7 +49,7 @@ async def getAllRayon():
 
 
 @app.get("/users")
-async def getAllUsers():
+async def getUsers():
     return getAllUsers()
 
 
@@ -76,6 +76,7 @@ async def addAisle(aisle: Aisle):
 
 @app.post("/addRecipe")
 async def addRecipe(rec: Recipe):
+    # TODO  Verif si name est libre
     recipe = createRecipe(rec.name, rec.description, rec.id_user)
 
     createMultipleIngredients(rec.ingredients, recipe.id)
