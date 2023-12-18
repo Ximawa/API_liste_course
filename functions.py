@@ -1,5 +1,6 @@
 from model import engine, Users, Recipes, Aisles, Ingredients
-from sqlmodel import Session, select 
+from sqlmodel import Session, select
+from collections import defaultdict
 
 import hashlib
 
@@ -180,14 +181,25 @@ def createMultipleIngredients(ingredientsList, id_recipe):
 """
 def getIngredientsByRecipeIds(recipe_ids):
     with Session(engine) as session:
-        statement = select(Ingredients).where(Ingredients.fk_recipe.in_(recipe_ids))
+        statement = select(Ingredients, Aisles).where(Ingredients.fk_recipe.in_(recipe_ids)).where(Ingredients.fk_aisle == Aisles.id)
         results = session.exec(statement)
 
-        return results.fetchall()
-    
+        ingredients_dict = defaultdict(float)
+
+        
+        for row in results.fetchall():
+            ingredient_key = (row.Ingredients.name, row.Ingredients.unit, row.Aisles.name)
+            ingredients_dict[ingredient_key] += row.Ingredients.quantity
+        
+        unique_ingredients = [
+            {'name': key[0], 'unit': key[1], 'aisle': key[2], 'quantity': quantity}
+            for key, quantity in ingredients_dict.items()
+        ]
+        return unique_ingredients
+
 """
     getIngredientsByRecipeIds
-    Retournes tous les ingredients lies a la liste de recipe.id en input
+    Retournes tous les ingredients lies a la recipe.id en input
 
 """
 def getIngredientsByRecipeId(recipe_id):

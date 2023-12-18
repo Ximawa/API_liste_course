@@ -24,6 +24,9 @@ class Recipe(BaseModel):
     ingredients: List[Ingredient]
     id_user: int
 
+class GroceriesList(BaseModel):
+    id_recipes: List[int]
+
 app = FastAPI()
 
 @app.get("/")
@@ -72,3 +75,8 @@ async def addRecipe(rec: Recipe):
 @app.get("/recette/{recetteID}")
 async def getRecetteByID(recetteID):
     return getIngredientsByRecipeId(recetteID)
+
+@app.post("/listeCourse")
+async def getGroceriesList(list: GroceriesList):
+    print(f"Recette demander : {list.id_recipes}")
+    return getIngredientsByRecipeIds(list.id_recipes)
