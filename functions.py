@@ -54,6 +54,23 @@ def getAllUsers():
         return results.fetchall()
 
 """
+
+checkLoginAvaible 
+Vérifie si le nom de l'utilisateur existe déja
+
+"""
+
+def checkLoginAvaible(login):
+    with Session(engine) as session:
+        statement = select(Users).where(Users.login == login)
+        results = session.exec(statement)
+        if results.fetchall() == []:
+            return True
+        else:
+            return False
+        
+
+"""
                                                 RECIPES
 """
 
@@ -98,6 +115,21 @@ def getRecipeById(recipe_id):
 
         return results.fetchall()
     
+
+"""
+
+checkRecipeAvaible 
+Vérifie si le nom de la recette d'un utilisateur existe déja 
+
+"""
+def checkRecipeNameAvaible(user_id,name):
+    with Session(engine) as session:
+        statement = select(Recipes).where(Recipes.name == name).where(Recipes.fk_user == user_id)
+        results = session.exec(statement)
+        if results.fetchall() == []:
+            return True
+        else:
+            return False
 
 """
                                                 AISLES

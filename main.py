@@ -60,10 +60,11 @@ async def getRecipeByID(recetteID):
 
 @app.post("/addUser")
 async def addUser(user: User):
-    # TODO  Verif si login est libre
-    u = createUser(user.login, user.pswd)
-
-    return {"status": "Success", "userID" : u.id}
+    if (checkLoginAvaible(user.login)):
+        u = createUser(user.login, user.pswd)
+        return {"status": "Success", "userID" : u.id}
+    else:
+        return {"error": "Le login n'est pas disponible"}
 
 
 @app.post("/addAisle")
@@ -76,17 +77,22 @@ async def addAisle(aisle: Aisle):
 
 @app.post("/addRecipe")
 async def addRecipe(rec: Recipe):
-    # TODO  Verif si name est libre
-    recipe = createRecipe(rec.name, rec.description, rec.id_user)
+    if (checkRecipeNameAvaible(rec.id_user,rec.name)):
+        recipe = createRecipe(rec.name, rec.description, rec.id_user)
+        createMultipleIngredients(rec.ingredients, recipe.id)
+        return {
+            "status": "Success",
+            'idRecette': recipe.id
+        }
+    else:
+        return {"error: la recette existe deja"}
 
-    createMultipleIngredients(rec.ingredients, recipe.id)
 
-    return {
-        "status": "Success",
-        'idRecette': recipe.id
-    }
+
+    
 
 
 @app.post("/listeCourse")
 async def groceriesList(list: GroceriesList):
     return getIngredientsByRecipeIds(list.id_recipes)
+
