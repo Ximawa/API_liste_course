@@ -1,6 +1,7 @@
 from model import engine, Users, Recipes, Aisles, Ingredients
-from sqlmodel import Session, select
+from sqlmodel import Session, select, delete
 from collections import defaultdict
+
 
 import hashlib
 
@@ -70,8 +71,7 @@ def checkLoginAvaible(login):
             return False
 
 """
-
-    deletUsers
+    deleteUsers
     Supprime l'utilisateur
 
 """
@@ -144,6 +144,24 @@ def checkRecipeNameAvaible(user_id,name):
             return True
         else:
             return False
+        
+"""
+
+    deleteRecipes
+    Supprime une recette
+
+"""
+
+def deleteRecipes(id_recipe):
+    deleteIngredientFromRecipe(id_recipe)
+    with Session(engine) as session:
+        statement = select(Recipes).where(Recipes.id == id_recipe)
+        results = session.exec(statement)
+        recipe = results.fetchall()
+    
+        session.delete(recipe)
+        session.commit()
+
 
 """
                                                 AISLES
@@ -191,6 +209,20 @@ def checkAisleNameAvaible(name):
             return True
         else:
             return False
+
+"""
+    deleteAisles
+    Supprime un rayon
+
+"""
+
+def deleteAisles(id_aisle):
+    with Session(engine) as session:
+        statement = select(Aisles).where(Aisles.id == id_aisle)
+        results = session.exec(statement)
+        aisle = results.fetchall()
+        session.delete(aisle)
+        session.commit()
 
 
 
@@ -270,8 +302,21 @@ def getIngredientsByRecipeId(recipe_id):
 
         return results.fetchall()
     
-    
 
+"""
+
+    deleteIngredientFromRecipe
+    Supprime les ingredients d'une recette
+
+"""
+
+def deleteIngredientFromRecipe(id_recipe):
+    with Session(engine) as session:
+        ingredients_to_delete = session.exec(
+            delete(Ingredients).where(Ingredients.fk_recipe == id_recipe)
+        ).all()
+
+    session.commit()
 
 
 def main():

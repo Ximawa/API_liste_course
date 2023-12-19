@@ -33,6 +33,11 @@ class GroceriesList(BaseModel):
 class DelUsers(BaseModel):
     id_user: int
 
+class DelRecipes(BaseModel):
+    id_recipe: int
+
+class DelAisle(BaseModel):
+    id_aisle: int
 
 """
                                                 ROUTES
@@ -98,4 +103,16 @@ async def groceriesList(list: GroceriesList):
 @app.post("/deleteUser")
 async def deleteUser(user: DelUsers):
     deleteUsers(user.id_user)
+    return {"Status": "Success"}
+
+# Ne fonctionne pas
+@app.post("/deleteRecipe")
+async def deleteRecipe(recipe: DelRecipes):
+    deleteRecipes(recipe.id_recipe)
+    return {"Status": "Success"}
+
+# Ne fonctionne pas
+@app.post("/deleteAisle")
+async def deleteAisles(aisle: DelAisle):
+    deleteAisles(aisle.id_aisle)
     return {"Status": "Success"}
