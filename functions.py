@@ -157,7 +157,7 @@ def deleteRecipes(id_recipe):
     with Session(engine) as session:
         statement = select(Recipes).where(Recipes.id == id_recipe)
         results = session.exec(statement)
-        recipe = results.fetchall()
+        recipe = results.one()
     
         session.delete(recipe)
         session.commit()
