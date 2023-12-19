@@ -220,7 +220,7 @@ def deleteAisles(id_aisle):
     with Session(engine) as session:
         statement = select(Aisles).where(Aisles.id == id_aisle)
         results = session.exec(statement)
-        aisle = results.fetchall()
+        aisle = results.one()
         session.delete(aisle)
         session.commit()
 

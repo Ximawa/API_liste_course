@@ -105,14 +105,14 @@ async def deleteUser(user: DelUsers):
     deleteUsers(user.id_user)
     return {"Status": "Success"}
 
-# Ne fonctionne pas
+
 @app.post("/deleteRecipe")
 async def deleteRecipe(recipe: DelRecipes):
     deleteRecipes(recipe.id_recipe)
     return {"Status": "Success"}
 
-# Ne fonctionne pas
+
 @app.post("/deleteAisle")
-async def deleteAisles(aisle: DelAisle):
+async def deleteAisle(aisle: DelAisle):
     deleteAisles(aisle.id_aisle)
     return {"Status": "Success"}
