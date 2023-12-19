@@ -312,11 +312,9 @@ def getIngredientsByRecipeId(recipe_id):
 
 def deleteIngredientFromRecipe(id_recipe):
     with Session(engine) as session:
-        ingredients_to_delete = session.exec(
-            delete(Ingredients).where(Ingredients.fk_recipe == id_recipe)
-        ).all()
-
-    session.commit()
+        ingredients_to_delete = delete(Ingredients).where(Ingredients.fk_recipe == id_recipe)
+        session.exec(ingredients_to_delete)
+        session.commit()
 
 
 def main():
