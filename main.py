@@ -98,7 +98,7 @@ async def addRecipe(rec: Recipe):
 
 @app.post("/listeCourse")
 async def groceriesList(list: GroceriesList):
-    return getIngredientsByRecipeIds(list.id_recipes)
+    return getMultiplesIngredientsByRecipeIds(list.id_recipes)
 
 @app.post("/deleteUser")
 async def deleteUser(user: DelUsers):

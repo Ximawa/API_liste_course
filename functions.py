@@ -27,9 +27,15 @@ def hashSha256(string):
 """
 
 """
-    createUser
-    Insert une nouvelle ligne dans la table Users avec le login et mdp en claire recu
+createUser
+Inserts a new row in the Users table with the received login and clear password.
 
+Parameters:
+login (str): The login of the user.
+pswd (str): The password of the user.
+
+Returns:
+user: The created user.
 """
 def createUser(login, pswd):
     user = Users(login=login, pswd=hashSha256(pswd))
@@ -41,26 +47,29 @@ def createUser(login, pswd):
         session.refresh(user)
         return user
     
-
-
 """
-    getAllUsers
-    Retourne tout les utilisateurs present en BDD
+getAllUsers
+Returns all users present in the database.
 
+Returns:
+list: A list of all users.
 """
 def getAllUsers():
     with Session(engine) as session:  
         statement = select(Users)  
         results = session.exec(statement)  
         return results.fetchall()
-
+    
 """
+checkLoginAvaible
+Checks if the username already exists.
 
-    checkLoginAvaible 
-    Vérifie si le nom de l'utilisateur existe déja
+Parameters:
+login (str): The login of the user.
 
+Returns:
+bool: True if the username is available, False otherwise.
 """
-
 def checkLoginAvaible(login):
     with Session(engine) as session:
         statement = select(Users).where(Users.login == login)
@@ -71,11 +80,12 @@ def checkLoginAvaible(login):
             return False
 
 """
-    deleteUsers
-    Supprime l'utilisateur
+deleteUsers
+Deletes a user from the database based on the user id.
 
+Parameters:
+id_user (int): The id of the user to be deleted.
 """
-
 def deleteUsers(id_user):
     with Session(engine) as session:
         statement = select(Users).where(Users.id == id_user)
@@ -90,9 +100,16 @@ def deleteUsers(id_user):
 
 
 """
-    createRecipe
-    Insert une nouvelle ligne dans la table Recipes
+createRecipe
+Inserts a new row in the Recipes table with the given name, description, and user id.
 
+Parameters:
+name (str): The name of the recipe.
+description (str): The description of the recipe.
+id_user (int): The id of the user who created the recipe.
+
+Returns:
+recipe: The created recipe.
 """
 def createRecipe(name, description, id_user):
     recipe = Recipes(name=name, description=description, fk_user=id_user)
@@ -106,9 +123,14 @@ def createRecipe(name, description, id_user):
 
 
 """
-    getRecettesByUserId
-    Retourne toutes les recettes lies a un utilisateur via l'id en input
+getRecipesByUserId
+Fetches all recipes linked to a user via the user id.
 
+Parameters:
+user_id (int): The id of the user.
+
+Returns:
+list: A list of recipes linked to the user.
 """
 def getRecipesByUserId(user_id):
     with Session(engine) as session:
@@ -119,8 +141,14 @@ def getRecipesByUserId(user_id):
     
 
 """
-    getRecettesById
-    Retourne une recette via son id
+getRecipeById
+Fetches a recipe via its id.
+
+Parameters:
+recipe_id (int): The id of the recipe.
+
+Returns:
+recipe: The fetched recipe.
 """
 def getRecipeById(recipe_id):
     with Session(engine) as session:
@@ -131,12 +159,17 @@ def getRecipeById(recipe_id):
     
 
 """
+checkRecipeNameAvaible
+Checks if the recipe name already exists for a specific user.
 
-checkRecipeAvaible 
-Vérifie si le nom de la recette d'un utilisateur existe déja 
+Parameters:
+user_id (int): The id of the user.
+name (str): The name of the recipe.
 
+Returns:
+bool: True if the recipe name is available for the user, False otherwise.
 """
-def checkRecipeNameAvaible(user_id,name):
+def checkRecipeNameAvaible(user_id, name):
     with Session(engine) as session:
         statement = select(Recipes).where(Recipes.name == name).where(Recipes.fk_user == user_id)
         results = session.exec(statement)
@@ -146,12 +179,16 @@ def checkRecipeNameAvaible(user_id,name):
             return False
         
 """
+deleteRecipes
+Deletes a recipe from the database based on the recipe id.
 
-    deleteRecipes
-    Supprime une recette
+Parameters:
+id_recipe (int): The id of the recipe to be deleted.
 
+Note:
+This function will first delete all ingredients linked to the recipe by calling the deleteIngredientFromRecipe function.
+Then it will delete the recipe itself.
 """
-
 def deleteRecipes(id_recipe):
     deleteIngredientFromRecipe(id_recipe)
     with Session(engine) as session:
@@ -169,9 +206,14 @@ def deleteRecipes(id_recipe):
 
 
 """
-    createAisle
-    Insert une nouvelle ligne dans la table Aisles
+createAisle
+Inserts a new row in the Aisles table with the given name.
 
+Parameters:
+name (str): The name of the aisle.
+
+Returns:
+aisle: The created aisle.
 """
 def createAisle(name):
     aisle = Aisles(name=name)
@@ -185,9 +227,11 @@ def createAisle(name):
     
 
 """
-    getAllAisles
-    Retourne tout les rayons present en BDD
+getAllAisles
+Returns all aisles present in the database.
 
+Returns:
+list: A list of all aisles.
 """
 def getAllAisles():
     with Session(engine) as session:  
@@ -196,10 +240,14 @@ def getAllAisles():
         return results.fetchall()
 
 """
+checkAisleNameAvaible
+Checks if the aisle name already exists in the database.
 
-checkAisleNameAvaible 
-Vérifie si le nom de la recette d'un utilisateur existe déja 
+Parameters:
+name (str): The name of the aisle.
 
+Returns:
+bool: True if the aisle name is available, False otherwise.
 """
 def checkAisleNameAvaible(name):
     with Session(engine) as session:
@@ -211,11 +259,12 @@ def checkAisleNameAvaible(name):
             return False
 
 """
-    deleteAisles
-    Supprime un rayon
+deleteAisles
+Deletes an aisle from the database based on the aisle id.
 
+Parameters:
+id_aisle (int): The id of the aisle to be deleted.
 """
-
 def deleteAisles(id_aisle):
     with Session(engine) as session:
         statement = select(Aisles).where(Aisles.id == id_aisle)
@@ -232,9 +281,18 @@ def deleteAisles(id_aisle):
 
 
 """
-    createIngredient
-    Insert une nouvelle ligne dans la table Aisles
+createIngredient
+Inserts a new row in the Ingredients table with the given name, quantity, unit, aisle id, and recipe id.
 
+Parameters:
+name (str): The name of the ingredient.
+quantity (float): The quantity of the ingredient.
+unit (str): The unit of measurement for the ingredient.
+id_aisle (int): The id of the aisle where the ingredient is located.
+id_recipe (int): The id of the recipe that the ingredient is part of.
+
+Returns:
+ingredient: The created ingredient.
 """
 def createIngredient(name, quantity, unit, id_aisle, id_recipe):
     ingredient = Ingredients(name=name, quantity=quantity, unit=unit, fk_recipe=id_recipe, fk_aisle=id_aisle)
@@ -247,9 +305,12 @@ def createIngredient(name, quantity, unit, id_aisle, id_recipe):
         return ingredient
 
 """
-    createMultipleIngredients
-    Insert plusieurs ligne dans la table ingredients toutes ayant la meme fk_recipe
+createMultipleIngredients
+Inserts multiple rows in the Ingredients table, all having the same recipe id.
 
+Parameters:
+ingredientsList (list): A list of ingredient data. Each item in the list is an object with properties: name, quantity, unit, and aisle id.
+id_recipe (int): The id of the recipe that the ingredients are part of.
 """
 def createMultipleIngredients(ingredientsList, id_recipe):
     with Session(engine) as session:
@@ -268,11 +329,16 @@ def createMultipleIngredients(ingredientsList, id_recipe):
 
 
 """
-    getIngredientsByRecipeIds
-    Prend en input une liste d'id de recette et retourne les ingredients neccesaire en addionant la quantite des ingredients ayant le meme nom et unite
+getMultiplesIngredientsByRecipeIds
+Fetches all ingredients linked to a list of recipe ids.
 
+Parameters:
+recipe_ids (list): A list of recipe ids.
+
+Returns:
+list: A list of ingredients linked to the recipes.
 """
-def getIngredientsByRecipeIds(recipe_ids):
+def getMultiplesIngredientsByRecipeIds(recipe_ids):
     with Session(engine) as session:
         statement = select(Ingredients, Aisles).where(Ingredients.fk_recipe.in_(recipe_ids)).where(Ingredients.fk_aisle == Aisles.id)
         results = session.exec(statement)
@@ -291,9 +357,14 @@ def getIngredientsByRecipeIds(recipe_ids):
 
 
 """
-    getIngredientsByRecipeIds
-    Retournes tous les ingredients lies a la recipe.id en input
+getIngredientsByRecipeId
+Fetches all ingredients linked to a specific recipe id.
 
+Parameters:
+recipe_id (int): The id of the recipe.
+
+Returns:
+list: A list of ingredients linked to the recipe.
 """
 def getIngredientsByRecipeId(recipe_id):
     with Session(engine) as session:
@@ -304,12 +375,15 @@ def getIngredientsByRecipeId(recipe_id):
     
 
 """
+deleteIngredientFromRecipe
+Deletes all ingredients linked to a specific recipe id from the database.
 
-    deleteIngredientFromRecipe
-    Supprime les ingredients d'une recette
+Parameters:
+recipe_id (int): The id of the recipe.
 
+Note:
+This function will commit the changes to the database, so the deletion is permanent.
 """
-
 def deleteIngredientFromRecipe(id_recipe):
     with Session(engine) as session:
         ingredients_to_delete = delete(Ingredients).where(Ingredients.fk_recipe == id_recipe)
