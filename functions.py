@@ -380,9 +380,6 @@ Deletes all ingredients linked to a specific recipe id from the database.
 
 Parameters:
 recipe_id (int): The id of the recipe.
-
-Note:
-This function will commit the changes to the database, so the deletion is permanent.
 """
 def deleteIngredientFromRecipe(id_recipe):
     with Session(engine) as session:
