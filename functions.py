@@ -80,13 +80,13 @@ def checkLoginAvaible(login):
             return False
 
 """
-deleteUsers
+deleteUser
 Deletes a user from the database based on the user id.
 
 Parameters:
 id_user (int): The id of the user to be deleted.
 """
-def deleteUsers(id_user):
+def deleteUser(id_user):
     with Session(engine) as session:
         statement = select(Users).where(Users.id == id_user)
         results = session.exec(statement)
@@ -179,7 +179,7 @@ def checkRecipeNameAvaible(user_id, name):
             return False
         
 """
-deleteRecipes
+deleteRecipe
 Deletes a recipe from the database based on the recipe id.
 
 Parameters:
@@ -189,7 +189,7 @@ Note:
 This function will first delete all ingredients linked to the recipe by calling the deleteIngredientFromRecipe function.
 Then it will delete the recipe itself.
 """
-def deleteRecipes(id_recipe):
+def deleteRecipe(id_recipe):
     deleteIngredientFromRecipe(id_recipe)
     with Session(engine) as session:
         statement = select(Recipes).where(Recipes.id == id_recipe)
@@ -259,13 +259,13 @@ def checkAisleNameAvaible(name):
             return False
 
 """
-deleteAisles
+deleteAisle
 Deletes an aisle from the database based on the aisle id.
 
 Parameters:
 id_aisle (int): The id of the aisle to be deleted.
 """
-def deleteAisles(id_aisle):
+def deleteAisle(id_aisle):
     with Session(engine) as session:
         statement = select(Aisles).where(Aisles.id == id_aisle)
         results = session.exec(statement)
@@ -390,7 +390,7 @@ def deleteIngredientFromRecipe(id_recipe):
 
 def main():
     recipe_ids_to_search = [1, 2]
-    ingredients_related_to_recipes = getIngredientsByRecipeIds(recipe_ids_to_search)
+    ingredients_related_to_recipes = getIngredientsByRecipeId(recipe_ids_to_search)
 
     if ingredients_related_to_recipes:
         print("Ingrédients associés aux recettes sélectionnées :")

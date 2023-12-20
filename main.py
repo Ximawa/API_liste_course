@@ -102,17 +102,17 @@ async def groceriesList(list: GroceriesList):
 
 @app.post("/deleteUser")
 async def deleteUser(user: DelUsers):
-    deleteUsers(user.id_user)
+    deleteUser(user.id_user)
     return {"Status": "Success"}
 
 
 @app.post("/deleteRecipe")
 async def deleteRecipe(recipe: DelRecipes):
-    deleteRecipes(recipe.id_recipe)
+    deleteRecipe(recipe.id_recipe)
     return {"Status": "Success"}
 
 
 @app.post("/deleteAisle")
 async def deleteAisle(aisle: DelAisle):
-    deleteAisles(aisle.id_aisle)
+    deleteAisle(aisle.id_aisle)
     return {"Status": "Success"}
