@@ -101,18 +101,18 @@ async def groceriesList(list: GroceriesList):
     return getMultiplesIngredientsByRecipeIds(list.id_recipes)
 
 @app.post("/deleteUser")
-async def deleteUser(user: DelUsers):
+async def deleteUsers(user: DelUsers):
     deleteUser(user.id_user)
     return {"Status": "Success"}
 
 
 @app.post("/deleteRecipe")
-async def deleteRecipe(recipe: DelRecipes):
+async def deleteRecipes(recipe: DelRecipes):
     deleteRecipe(recipe.id_recipe)
     return {"Status": "Success"}
 
 
 @app.post("/deleteAisle")
-async def deleteAisle(aisle: DelAisle):
+async def deleteAisles(aisle: DelAisle):
     deleteAisle(aisle.id_aisle)
     return {"Status": "Success"}
