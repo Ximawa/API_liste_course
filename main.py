@@ -39,6 +39,10 @@ class DelRecipes(BaseModel):
 class DelAisle(BaseModel):
     id_aisle: int
 
+class UpdateUser(BaseModel):
+    id_user: int
+    login: str
+    pswd: str 
 """
                                                 ROUTES
 """
@@ -115,4 +119,9 @@ async def deleteRecipes(recipe: DelRecipes):
 @app.post("/deleteAisle")
 async def deleteAisles(aisle: DelAisle):
     deleteAisle(aisle.id_aisle)
+    return {"Status": "Success"}
+
+@app.post("/updateUser")
+async def updateUsers(user: UpdateUser):
+    updateUser(user.id_user, user.login, user.pswd)
     return {"Status": "Success"}

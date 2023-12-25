@@ -95,6 +95,24 @@ def deleteUser(id_user):
         session.commit()
 
 """
+updateUser
+Update a user from the database based on the user id.
+"""
+def updateUser(id_user, login, pswd):
+    user = Users(login=login, pswd=hashSha256(pswd))
+
+    with Session(engine) as session:
+        statement = select(Users).where(Users.id == id_user)
+        result = session.exec(statement)
+        user_result = result.fetchall()
+
+        session.add(user_result)
+        session.commit()
+        session.refresh(user_result)
+        return user
+
+
+"""
                                                 RECIPES
 """
 
