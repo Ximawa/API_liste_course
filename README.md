@@ -25,13 +25,13 @@ OR
 
 ----------------------------------------------------------------
 
-Lancement de l'API: 
+start API: 
 
 - uvicorn main:app --reload
 
 ----------------------------------------------------------------
 
-Utilisation / Test des routes API: 
+Route testing : 
 
 http://127.0.0.1:8000/docs#/
 
