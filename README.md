@@ -15,7 +15,7 @@ Install SQLModel:
 
 ----------------------------------------------------------------
 
-Creation de la BDD:
+Create Database:
 
 - py ./model.py
 
