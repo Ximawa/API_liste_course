@@ -43,10 +43,22 @@ class UpdateUser(BaseModel):
     id_user: int
     login: str
     pswd: str 
+
+class UpdateAisle(BaseModel):
+    id_aisle: int
+    name: str
+
+class UpdateRecipe(BaseModel):
+    id_user: int
+    id_recipe: int
+    name: str
+    description: str
+    ingredients: List[Ingredient]
+
+
 """
                                                 ROUTES
 """
-
 
 app = FastAPI()
 
@@ -55,9 +67,9 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/rayon")
-async def getAllRayon():
-    return getAllAisles()
+@app.get("/aisle")
+async def getAllAisles():
+    return getAisles()
 
 
 @app.get("/users")
@@ -125,3 +137,19 @@ async def deleteAisles(aisle: DelAisle):
 async def updateUsers(user: UpdateUser):
     updateUser(user.id_user, user.login, user.pswd)
     return {"Status": "Success"}
+
+@app.post("/updateAisle")
+async def updateAisles(aisle: UpdateAisle):
+    updateAisle(aisle.id_aisle, aisle.name)
+    return {"Status": "Success"}
+
+@app.post("/updateRecipe")
+async def updateRecipes(rec: UpdateRecipe):
+    if (checkRecipeNameAvaible(rec.id_user,rec.name)):
+        updateRecipe(rec.id_recipe, rec.name, rec.description)
+        updateIngredients(rec.ingredients, rec.id_recipe)
+        return {
+            "status": "Success",
+        }
+    else:
+        return {"error: la recette existe deja"}

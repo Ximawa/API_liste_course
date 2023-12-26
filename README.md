@@ -17,13 +17,17 @@ Install SQLModel:
 
 Creation de la BDD:
 
-py ./model.py
+- py ./model.py
+
+OR
+
+- python ./model.py
 
 ----------------------------------------------------------------
 
 Lancement de l'API: 
 
-uvicorn main:app --reload
+- uvicorn main:app --reload
 
 ----------------------------------------------------------------
 

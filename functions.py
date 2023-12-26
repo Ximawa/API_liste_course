@@ -94,22 +94,34 @@ def deleteUser(id_user):
         session.delete(user)
         session.commit()
 
+
 """
 updateUser
-Update a user from the database based on the user id.
+Update user information in the database.
+
+Parameters:
+    id_user (int): The ID of the user to update.
+    login (str): The new login for the user.
+    pswd (str): The new password for the user.
+
+Returns:
+    User: The updated user object.
+
 """
 def updateUser(id_user, login, pswd):
-    user = Users(login=login, pswd=hashSha256(pswd))
 
     with Session(engine) as session:
         statement = select(Users).where(Users.id == id_user)
         result = session.exec(statement)
-        user_result = result.fetchall()
+        user_result = result.one()
 
-        session.add(user_result)
+        user_result.login = login
+        user_result.pswd = hashSha256(pswd)
+
         session.commit()
         session.refresh(user_result)
-        return user
+
+        return user_result
 
 
 """
@@ -217,6 +229,30 @@ def deleteRecipe(id_recipe):
         session.delete(recipe)
         session.commit()
 
+"""
+updateRecipe
+Updates the details of a recipe in the database.
+
+Parameters:
+recipe_id (int): The id of the recipe to be updated.
+new_name (str): The updated name of the recipe.
+new_description (str): The updated description of the recipe.
+
+Note:
+This function does not update the ingredients of the recipe.
+"""
+def updateRecipe(recipe_id, new_name, new_description):
+    with Session(engine) as session:
+        statement = select(Recipes).where(Recipes.id == recipe_id)
+        results = session.exec(statement)
+        recipe = results.one()
+        
+        recipe.name = new_name
+        recipe.description = new_description
+        
+        session.commit()
+
+
 
 """
                                                 AISLES
@@ -251,7 +287,7 @@ Returns all aisles present in the database.
 Returns:
 list: A list of all aisles.
 """
-def getAllAisles():
+def getAisles():
     with Session(engine) as session:  
         statement = select(Aisles)  
         results = session.exec(statement)  
@@ -291,6 +327,21 @@ def deleteAisle(id_aisle):
         session.delete(aisle)
         session.commit()
 
+"""
+updateAisle
+Updates the name of an aisle in the database based on the aisle id.
+
+Parameters:
+id_aisle (int): The id of the aisle to be updated.
+new_name (str): The new name for the aisle.
+"""
+def updateAisle(id_aisle, new_name):
+    with Session(engine) as session:
+        statement = select(Aisles).where(Aisles.id == id_aisle)
+        results = session.exec(statement)
+        aisle = results.one()
+        aisle.name = new_name
+        session.commit()
 
 
 """
@@ -331,6 +382,30 @@ ingredientsList (list): A list of ingredient data. Each item in the list is an o
 id_recipe (int): The id of the recipe that the ingredients are part of.
 """
 def createMultipleIngredients(ingredientsList, id_recipe):
+    with Session(engine) as session:
+        ingredients_to_add = []
+        for ingredient_data in ingredientsList:
+            name = ingredient_data.name
+            quantity = ingredient_data.quantity
+            unit = ingredient_data.unit
+            id_aisle = ingredient_data.rayon
+            
+            ingredient = Ingredients(name=name, quantity=quantity, unit=unit, fk_recipe=id_recipe, fk_aisle=id_aisle)
+            ingredients_to_add.append(ingredient)
+        
+        session.add_all(ingredients_to_add)
+        session.commit()
+
+
+"""
+Update the ingredients of a recipe.
+
+Parameters:
+    ingredientsList (list): List of ingredient data.
+    id_recipe (int): ID of the recipe to update.
+"""
+def updateIngredients(ingredientsList, id_recipe):
+    deleteIngredientFromRecipe(id_recipe)
     with Session(engine) as session:
         ingredients_to_add = []
         for ingredient_data in ingredientsList:
